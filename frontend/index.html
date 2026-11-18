@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KTÜN Yemekhane Otomasyon Sistemi | Konya Teknik Üniversitesi</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <!-- KTÜN Mühendislik Fakültesi / Yerleşke Geçişli Arka Plan -->
+  <div class="campus-bg-overlay" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <div class="brand">
+        <img src="/img/ktun-official-logo.png" alt="KTÜN Resmi Logo" class="brand-logo-img">
+        <div>
+          <h1 class="brand-title">Konya Teknik Üniversitesi</h1>
+          <span class="brand-sub">SKS Yemekhane Otomasyon Sistemi</span>
+        </div>
+      </div>
+
+      <div class="user-bar" id="user-bar">
+        <span class="badge badge-muted" id="guest-label">Misafir</span>
+        <button class="btn btn-primary btn-sm" id="btn-open-login">Giriş Yap</button>
+      </div>
+    </div>
+
+    <nav class="nav-strip" aria-label="Ana menü">
+      <div class="container nav-links" id="nav-links">
+        <button class="nav-btn active" data-screen="gunun-menusu">Günün Menüsü</button>
+        <button class="nav-btn" data-screen="haftalik">Haftalık &amp; Rezervasyon</button>
+        <button class="nav-btn auth-only hidden" data-screen="rezervasyonlar">Rezervasyonlarım</button>
+        <button class="nav-btn auth-only hidden" data-screen="bakiye">Bakiye</button>
+        <button class="nav-btn auth-only hidden" data-screen="degerlendirme">Değerlendirme</button>
+        <button class="nav-btn auth-only hidden" data-screen="profil">Profil &amp; Alerjenler</button>
+        <button class="nav-btn admin-only hidden" data-screen="yonetim">Yönetici Paneli</button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container main-content">
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- 1. GIRIS EKRANI -->
+    <section id="screen-giris" class="screen hidden">
+      <div class="card login-card">
+        <div class="login-brand">
+          <img src="/img/ktun-official-logo.png" alt="KTÜN Resmi Logo" class="login-logo-img">
+          <h2>Sisteme Giriş</h2>
+          <p class="muted">Kampüs e-posta adresiniz ve şifrenizle oturum açın.</p>
+        </div>
+        <form id="login-form" class="form-stack">
+          <div class="form-group">
+            <label for="login-eposta">E-posta</label>
+            <input type="email" id="login-eposta" required placeholder="ornek@ogr.kampus.edu.tr" autocomplete="username">
+          </div>
+          <div class="form-group">
+            <label for="login-sifre">Şifre</label>
+            <input type="password" id="login-sifre" required placeholder="••••••" autocomplete="current-password">
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Giriş Yap</button>
+        </form>
+
+        <div class="demo-box">
+          <p class="demo-title">Resmi Test Hesapları (Şifre: <code>Yemek2026!</code> veya <code>123456</code>)</p>
+          <div class="demo-buttons">
+            <button type="button" class="btn btn-outline btn-sm demo-fill" data-email="ayse.demir@ogr.kampus.edu.tr">Öğrenci (Ayşe - 12.50 ₺)</button>
+            <button type="button" class="btn btn-outline btn-sm demo-fill" data-email="mehmet.yildiz@ogr.kampus.edu.tr">Öğrenci (Mehmet)</button>
+            <button type="button" class="btn btn-outline btn-sm demo-fill" data-email="murat.kaya@kampus.edu.tr">Personel (Murat)</button>
+            <button type="button" class="btn btn-outline btn-sm demo-fill" data-email="leyla.arslan@kampus.edu.tr">Yönetici (Leyla)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. GUNUN MENUSU -->
+    <section id="screen-gunun-menusu" class="screen">
+      <!-- KTÜN Mühendislik Fakültesi Saydam Arka Planlı Hero Kartı -->
+      <div class="card ktun-faculty-hero mb-20">
+        <div class="faculty-hero-content">
+          <div class="faculty-badge-row">
+            <span class="hero-sub-badge">🏛️ KTÜN Mühendislik ve Doğa Bilimleri Fakültesi</span>
+            <span class="hero-sub-badge tag-price">🏷️ Öğrenci: 30,00 ₺</span>
+          </div>
+          <h2 class="faculty-hero-title">Günün Menüsü</h2>
+          <p class="faculty-hero-desc">Gelişim Yerleşkesi · 4 Çeşit Taze Tabldot &amp; Besin Değeri Takip Sistemi</p>
+          <div class="faculty-hero-pills">
+            <span class="faculty-pill">⏰ Öğle Servisi: 11:30 - 14:00</span>
+            <span class="faculty-pill">⏰ Akşam Servisi: 17:00 - 19:30</span>
+            <span class="faculty-pill">🛡️ ISO 22000 Gıda Güvenliği</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- KTÜN Bilgi Kutucukları (Siyah, Kırmızı, Beyaz Temalı) -->
+      <div class="ktun-stats-grid mb-20">
+        <div class="stat-box stat-black">
+          <div class="stat-icon-wrap">🍲</div>
+          <div class="stat-content">
+            <span class="stat-label">KTÜN Menü Hizmeti</span>
+            <h4 class="stat-value">4 Çeşit Tabldot</h4>
+            <span class="stat-desc">Dengeli kalori &amp; besin değeri</span>
+          </div>
+        </div>
+
+        <div class="stat-box stat-red">
+          <div class="stat-icon-wrap">🏷️</div>
+          <div class="stat-content">
+            <span class="stat-label">Öğrenci Menü Fiyatı</span>
+            <h4 class="stat-value">30,00 ₺</h4>
+            <span class="stat-desc">Günlük taze &amp; kaliteli yemek</span>
+          </div>
+        </div>
+
+        <div class="stat-box stat-dark-slate">
+          <div class="stat-icon-wrap">⏰</div>
+          <div class="stat-content">
+            <span class="stat-label">Yemek Dağıtım Saatleri</span>
+            <h4 class="stat-value">11:30 - 14:00</h4>
+            <span class="stat-desc">Akşam Servisi: 17:00 - 19:30</span>
+          </div>
+        </div>
+
+        <div class="stat-box stat-red-gradient">
+          <div class="stat-icon-wrap">🛡️</div>
+          <div class="stat-content">
+            <span class="stat-label">Kalite &amp; Sağlık Takibi</span>
+            <h4 class="stat-value">14 Alerjen Kontrolü</h4>
+            <span class="stat-desc">ISO 22000 Gıda Güvenliği</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card filter-bar">
+        <div class="form-group">
+          <label for="gm-yemekhane">Yemekhane</label>
+          <select id="gm-yemekhane"></select>
+        </div>
+        <div class="form-group">
+          <label for="gm-tarih">Tarih</label>
+          <input type="date" id="gm-tarih">
+        </div>
+        <div class="form-group">
+          <label for="gm-ogun">Öğün</label>
+          <select id="gm-ogun"></select>
+        </div>
+        <div class="form-group filter-action">
+          <button type="button" id="btn-gm-getir" class="btn btn-primary">Menüyü Göster</button>
+        </div>
+      </div>
+
+      <div id="gm-icerik"></div>
+    </section>
+
+    <!-- 3. HAFTALIK MENU VE REZERVASYON -->
+    <section id="screen-haftalik" class="screen hidden">
+      <div class="section-head">
+        <div>
+          <h2>Haftalık Menü ve Rezervasyon</h2>
+          <p class="muted">Boş kontenjanları ve rolünüze göre fiyatı görüntüleyip tek tıkla rezervasyon yapın.</p>
+        </div>
+      </div>
+
+      <div class="card filter-bar">
+        <div class="form-group">
+          <label for="hm-yemekhane">Yemekhane</label>
+          <select id="hm-yemekhane"></select>
+        </div>
+        <div class="form-group">
+          <label for="hm-baslangic">Başlangıç Tarihi</label>
+          <input type="date" id="hm-baslangic">
+        </div>
+        <div class="form-group filter-action">
+          <button type="button" id="btn-hm-getir" class="btn btn-primary">Haftalık Listele</button>
+        </div>
+      </div>
+
+      <div id="hm-icerik" class="menu-grid"></div>
+    </section>
+
+    <!-- 4. REZERVASYONLARIM -->
+    <section id="screen-rezervasyonlar" class="screen hidden">
+      <div class="section-head">
+        <div>
+          <h2>Rezervasyonlarım</h2>
+          <p class="muted">Aktif, kullanılmış ve iptal edilen tüm rezervasyonlarınız.</p>
+        </div>
+        <button type="button" id="btn-rez-yenile" class="btn btn-outline btn-sm">Yenile</button>
+      </div>
+      <div id="rez-icerik"></div>
+    </section>
+
+    <!-- 5. BAKIYE -->
+    <section id="screen-bakiye" class="screen hidden">
+      <div class="section-head">
+        <div>
+          <h2>Bakiye ve Hareketler</h2>
+          <p class="muted">Güncel bakiyeniz kaynak sunucudan, hareket geçmişi replikadan okunur.</p>
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="card balance-hero">
+          <span class="muted">Güncel Bakiye</span>
+          <div class="balance-amount" id="bakiye-tutar">0,00 TL</div>
+          <span class="badge badge-info" id="bakiye-kaynak-etiket">Kaynak: mysql-primary</span>
+
+          <form id="bakiye-form" class="form-stack mt-16">
+            <div class="quick-amounts">
+              <button type="button" class="btn btn-outline btn-sm quick-amt" data-amt="50">+50 TL</button>
+              <button type="button" class="btn btn-outline btn-sm quick-amt" data-amt="100">+100 TL</button>
+              <button type="button" class="btn btn-outline btn-sm quick-amt" data-amt="250">+250 TL</button>
+            </div>
+            <div class="form-group">
+              <label for="bakiye-input">Yüklenecek Tutar (TL)</label>
+              <input type="number" id="bakiye-input" min="1" max="5000" step="0.01" required placeholder="Örn: 100">
+            </div>
+            <div class="form-group">
+              <label for="bakiye-aciklama">Açıklama</label>
+              <input type="text" id="bakiye-aciklama" placeholder="Online bakiye yükleme">
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Bakiye Yükle</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>Bakiye Hareket Geçmişi</h3>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tarih</th>
+                  <th>İşlem</th>
+                  <th>Açıklama</th>
+                  <th class="text-right">Tutar</th>
+                </tr>
+              </thead>
+              <tbody id="bakiye-hareket-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. DEGERLENDIRME -->
+    <section id="screen-degerlendirme" class="screen hidden">
+      <div class="section-head">
+        <div>
+          <h2>Menü Değerlendirmeleri</h2>
+          <p class="muted">Turnikeden geçip kullandığınız menülere 1–5 arası puan ve yorum bırakabilirsiniz.</p>
+        </div>
+      </div>
+      <div id="deg-icerik" class="menu-grid"></div>
+    </section>
+
+    <!-- 8. PROFIL & ALERJEN TERCIHLERI (Asama 4) -->
+    <section id="screen-profil" class="screen hidden">
+      <div class="section-head">
+        <div>
+          <h2>Profil &amp; Alerjen Tercihlerim</h2>
+          <p class="muted">Alerjiniz bulunan maddeleri seçin; günün menüsünde bu alerjenleri içeren yemekler uyarıyla vurgulanır.</p>
+        </div>
+      </div>
+      <div class="card">
+        <form id="profil-alerjen-form" class="form-stack">
+          <div id="profil-alerjen-listesi" class="checkbox-grid"></div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary">Alerjen Tercihlerini Kaydet</button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 7. YONETICI PANELI -->
+    <section id="screen-yonetim" class="screen hidden">
+      <div class="section-head">
+        <div>
+          <h2>Yönetici Paneli</h2>
+          <p class="muted">Menü oluşturma, düzenleme, doluluk/puan raporları ve turnike geçiş simülasyonu.</p>
+        </div>
+      </div>
+
+      <div class="card mb-20">
+        <h3 id="yonetim-form-baslik">Yeni Menü Oluştur</h3>
+        <form id="yonetim-menu-form" class="form-grid">
+          <input type="hidden" id="ym-edit-id">
+          <div class="form-group">
+            <label for="ym-yemekhane">Yemekhane</label>
+            <select id="ym-yemekhane" required></select>
+          </div>
+          <div class="form-group">
+            <label for="ym-tarih">Tarih</label>
+            <input type="date" id="ym-tarih" required>
+          </div>
+          <div class="form-group">
+            <label for="ym-ogun">Öğün</label>
+            <select id="ym-ogun" required></select>
+          </div>
+          <div class="form-group">
+            <label for="ym-ogr-fiyat">Öğrenci Fiyatı (TL)</label>
+            <input type="number" id="ym-ogr-fiyat" step="0.01" min="0" value="30" required>
+          </div>
+          <div class="form-group">
+            <label for="ym-per-fiyat">Personel Fiyatı (TL)</label>
+            <input type="number" id="ym-per-fiyat" step="0.01" min="0" value="90" required>
+          </div>
+          <div class="form-group full-width">
+            <label>Menü Yemekleri</label>
+            <div id="ym-yemek-listesi" class="checkbox-grid"></div>
+          </div>
+          <div class="form-actions full-width">
+            <button type="submit" class="btn btn-primary" id="ym-submit-btn">Menüyü Kaydet</button>
+            <button type="button" class="btn btn-outline hidden" id="ym-cancel-edit">Düzenlemeyi İptal Et</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card mb-20">
+        <div class="card-head-row">
+          <h3>Menü Doluluk ve Ortalama Puan Raporu</h3>
+          <button type="button" id="btn-rapor-yenile" class="btn btn-outline btn-sm">Yenile</button>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tarih</th>
+                <th>Yemekhane</th>
+                <th>Öğün</th>
+                <th>Doluluk</th>
+                <th>Ort. Puan</th>
+                <th>Fiyat (Ögr/Per)</th>
+                <th>İşlem</th>
+              </tr>
+            </thead>
+            <tbody id="yonetim-rapor-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Turnike Geçiş Simülasyonu (sp_turnike_gecis)</h3>
+        <p class="muted">Aktif rezervasyonu 'kullanildi' durumuna geçirerek değerlendirme akışını test edebilirsiniz.</p>
+        <div id="turnike-listesi" class="turnike-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 Konya Teknik Üniversitesi · Sağlık, Kültür ve Spor Daire Başkanlığı</span>
+      <span class="footer-tech">Öğrenci No: 241229079 · Furkan Ortatepe · Web Teknolojileri Dönem Ödevi</span>
+    </div>
+  </footer>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
